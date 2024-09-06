@@ -1,3 +1,3 @@
 """
-Core packages including tokenizers, production rules tables and so on.
+Core packages including a lexer, tokenizer, production rules, tokens and so on.
 """

@@ -6,7 +6,15 @@ class Lexer():
         self.lexer = LexerGenerator()
 
     def _add_tokens(self):
+        self.lexer.add('string', r'"[^"]*"')
+        self.lexer.add('if', r'if')
+        self.lexer.add('then', r'then')
         self.lexer.add('time', r'\d{1,2}:\d{2}')
+        self.lexer.add('greater_than', r'>')
+        self.lexer.add('greater_or_equal_to', r'>=')
+        self.lexer.add('less_than', r'<')
+        self.lexer.add('less_or_equal_to', r'<=')
+        self.lexer.add('equal_to', r'==')
 
         float_pattern = r'((?<![\w.])[+-]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][+-]?\d+)?(?![\w.]))'
         integer_pattern = r'[+-]?\d+'
@@ -23,7 +31,6 @@ class Lexer():
         self.lexer.add('division', r'\/')
         self.lexer.add('exponentiation', r'\^')
 
-        self.lexer.add('string', r'"[^"]*"')
         self.lexer.ignore(r'\s+')
 
     def get_lexer(self):

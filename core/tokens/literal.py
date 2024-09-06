@@ -1,22 +1,49 @@
+"""Module with literal tokens, such as a number, string, duration, and so on."""
 import re
 from typing import Self
 
-
 class Number:
+    """
+    Literal token of a number type.
+     
+    Literal numeric token constructed, either of `int` or of `float`.
+    Evaluated always as `float`.
+    """
     def __init__(self, value: str) -> None:
         self.value = value
 
     def eval(self) -> float:
+        """
+        Evaluate value of a number.
+
+        Returns
+        -------
+        float
+            Value of a number.
+        """
         return float(self.value)
 
+    def __str__(self) -> str:
+        return self.value
+
 class String:
+    """Class representing literal of type `string`."""
     def __init__(self, value: str) -> None:
-        self.value: str = value
+        self.value: str = value.replace('"', '')
 
     def eval(self) -> str:
+        """
+        Evaluate value of a literal token of type `string`.
+
+        Returns
+        -------
+        str
+            Literal value of a string.
+        """
         return self.value
     
 class Duration:
+    """Class for literal token representing time spans."""
     def __init__(self, value: str) -> None:
         match = re.match(r'(?:(\d+)h)?(?:(\d+)m)?', value)
         if match:
@@ -44,6 +71,8 @@ class Duration:
             
 
 class Time:
+    """Class representing time in 24-hour format."""
+
     def __init__(self, value: str) -> None:
         parts = value.split(':')
         self.hours = int(parts[0])
@@ -56,7 +85,7 @@ class Time:
 
     def __sub__(self, other: 'Time') -> Duration:
         minutes_in_hour = 60
-        
+
         left_in_minutes = self.hours * minutes_in_hour + self.minutes
         right_in_minutes = other.hours * minutes_in_hour + other.minutes
         difference = left_in_minutes - right_in_minutes
@@ -68,33 +97,18 @@ class Time:
     def __str__(self) -> str:
         return f'{self.hours}:{self.minutes}'
 
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Time):
+            return self.hours == other.hours and self.minutes == other.minutes
+        return NotImplemented
+
     def eval(self) -> Self:
+        """
+        Evaluate time by returing itself.
+
+        Returns
+        -------
+        Self
+            Current instance of `Time` class.
+        """
         return self
-
-class BinaryOperator():
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-
-class Addition(BinaryOperator):
-    def eval(self) -> float | Time:
-        return self.left.eval() + self.right.eval()
-
-
-class Subtraction(BinaryOperator):
-    def eval(self) -> float:
-        return self.left.eval() - self.right.eval()
-
-class Multiplication(BinaryOperator):
-    def eval(self) -> float:
-        return self.left.eval() * self.right.eval()
-    
-class Division(BinaryOperator):
-    def eval(self) -> float:
-        if self.right.eval() == 0:
-            raise ZeroDivisionError("You cannot divide by 0.")
-        return self.left.eval() / self.right.eval()
-
-class Exponentiation(BinaryOperator):
-    def eval(self) -> float:
-        return self.left.eval() ** self.right.eval()

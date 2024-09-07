@@ -3,10 +3,10 @@ Module contains arthmetic tokens, mostly arthmetic operands such as plus,
 minus *et cetera*.
 """
 
-
 from core.tokens.literal import Time
 
 class BinaryOperator():
+    """Base class for binary operator, taking left- and righthand operands."""
     def __init__(self, left, right):
         self.left = left
         self.right = right

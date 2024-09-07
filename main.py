@@ -30,12 +30,21 @@ def evaluate(code: str) -> any:
 def repl() -> None:
     """Provide read-eval-print loop (REPL) for μLang."""
     while True:
-        code = input("-> ")
+        try:
+            code = input("-> ")
+        except KeyboardInterrupt:
+            logger.info('Exitting...')
+            break
+
         try:
             print(evaluate(code=code))
         except rply.errors.LexingError as e:
             position = e.source_pos
-            logger.critical('Unrecognised thing at line %d, column %d', position.lineno, position.colno)
+            logger.critical(
+                'Unrecognised thing at line %d, column %d',
+                position.lineno,
+                position.colno
+            )
         except Exception as e:
             logger.error(e)
 

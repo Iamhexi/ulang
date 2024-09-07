@@ -1,9 +1,11 @@
 """Module with integration tests of `evaluate()` function."""
 
-from core.tokens.literal import Time
-from main import evaluate
 from typing import Any
+
 import pytest
+
+from main import evaluate
+from core.tokens.literal import Duration, Time
 
 @pytest.mark.parametrize('code,output', [
     ('10', 10.0),
@@ -18,3 +20,23 @@ def test_evaluating_primitives(code: str, output: Any):
         f"Mismatch between an actual type ({type(evaluated)}) and" \
         f" expected type ({type(output)})."
     assert evaluated == output
+
+@pytest.mark.parametrize('code,output', [
+    ('9:30 - 8:00', '1h30m'),
+    ('10:00 - 9:00', '1h'),
+    ('12:15 - 8:30', '3h45m'),
+    ('12:00 - 12:00', '0m'),
+])
+def test_time_arthmetics(code: str, output: str):
+    """Test if time arthmetics works properly."""
+    evaluated = evaluate(code)
+    assert evaluated == Duration(output)
+
+@pytest.mark.parametrize('code', [
+    '8:00 - 9:00',
+    '00:00 - 23:59',
+])
+def test_time_arthmetics_emitting_warning(code: str):
+    """Test if subtracting a later hour from an earlier hours emits a warning."""
+    with pytest.raises(UserWarning):
+        evaluate(code)

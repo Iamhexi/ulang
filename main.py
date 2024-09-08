@@ -50,6 +50,8 @@ def repl() -> None:
                 position.lineno,
                 position.colno
             )
+        except OverflowError as e:
+            logger.warning(e.args[1])
         except Exception as e:
             logger.error(e)
 

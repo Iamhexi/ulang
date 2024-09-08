@@ -67,3 +67,10 @@ def test_time_chaining_raieses_exception(code: str):
 def test_arthmetic_precedence(code: str, result: float):
     """Test if hierarchy of precedence of arthmetic operators is preserved."""
     assert evaluate(code) == result
+
+def test_handling_out_of_range():
+    """
+    Test if when a numerical value is out of range, an exception is raised.
+    """
+    with pytest.raises(OverflowError):
+        evaluate('9999999 ^ 99999999')

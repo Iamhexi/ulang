@@ -1,11 +1,16 @@
+"""
+Main module of µLang language implementation. It contains both REPL and code
+evaluation function `evaluate()`.
+"""
 import logging
+from typing import Any
 import rply
 from core.lexer import Lexer
 from core.parser import Parser
 
 logger = logging.Logger('Main logger', level=logging.WARNING)
 
-def evaluate(code: str) -> any:
+def evaluate(code: str) -> Any:
     """
     Evaluate μLang code.
 
@@ -25,7 +30,7 @@ def evaluate(code: str) -> any:
     parser = parser_generator.get_parser()
 
     tokens = lexer.lex(code)
-    return parser.parse(tokens).eval()
+    return parser.parse(tokens).eval()  # type: ignore
 
 def repl() -> None:
     """Provide read-eval-print loop (REPL) for μLang."""
@@ -38,7 +43,7 @@ def repl() -> None:
 
         try:
             print(evaluate(code=code))
-        except rply.errors.LexingError as e:
+        except rply.errors.LexingError as e: # type: ignore
             position = e.source_pos
             logger.critical(
                 'Unrecognised thing at line %d, column %d',

@@ -22,14 +22,14 @@ from core.tokens.logic import (
     LessOrEqualTo,
     LessThan,
 )
-from core.tokens.literal import Number, String, Time
+from core.tokens.literal import Duration, Number, String, Time
 
 
 class Parser:
-    """Parser with"""
+    """µLang Parser with production rules encoded."""
     def __init__(self):
         self.pg = ParserGenerator(
-            [
+            tokens=[
                 "time",
                 "number",
                 "exponentiation",
@@ -45,7 +45,13 @@ class Parser:
                 "less_than",
                 "less_or_equal_to",
                 "equal_to",
-            ]
+            ],
+
+            precedence=[
+                ('left', ['addition', 'subtraction']),
+                ('left', ['multiplication', 'division']),
+                ('left', ['exponentiation']),
+            ],
         )
 
     def parse(self):
@@ -75,15 +81,19 @@ class Parser:
             return IfStatement(p[1], p[3])
 
         @self.pg.production(
-            "arthmetic_expression : arthmetic_expression multiplication term"
+            "arthmetic_expression : arthmetic_expression subtraction arthmetic_expression"
         )
         @self.pg.production(
-            "arthmetic_expression : arthmetic_expression subtraction term"
-        )
-        @self.pg.production("arthmetic_expression : arthmetic_expression division term")
-        @self.pg.production("arthmetic_expression : arthmetic_expression addition term")
+            "arthmetic_expression : arthmetic_expression addition arthmetic_expression"
+            )
         @self.pg.production(
-            "arthmetic_expression : arthmetic_expression exponentiation term"
+            "arthmetic_expression : arthmetic_expression multiplication arthmetic_expression"
+        )
+        @self.pg.production(
+            "arthmetic_expression : arthmetic_expression division arthmetic_expression"
+            )
+        @self.pg.production(
+            "arthmetic_expression : arthmetic_expression exponentiation arthmetic_expression"
         )
         def addition_expression(p) -> BinaryOperator:
             operator = p[1].gettokentype()
@@ -94,7 +104,7 @@ class Parser:
                     return Addition(p[0], p[2])
                 case "subtraction":
                     return Subtraction(p[0], p[2])
-                case "divison":
+                case "division":
                     return Division(p[0], p[2])
                 case "exponentiation":
                     return Exponentiation(p[0], p[2])
@@ -139,6 +149,20 @@ class Parser:
             right_operand = p[2]
             return evaluation_type(left_operand, right_operand)
 
+        @self.pg.production('expression : duration')
+        def duration(p):
+            return Duration(p[0])
+
+        @self.pg.production('expression : time')
+        def time_to_expression(p):
+            return Time(p[0].value)
+
+        @self.pg.production('duration : time subtraction time')
+        def time_subtraction(p):
+            time1 = Time(p[0].value)
+            time2 = Time(p[2].value)
+            return time1 - time2
+
         @self.pg.production("expression : arthmetic_expression")
         def expression_from_arthmetic_expression(p):
             return p[0]
@@ -147,21 +171,13 @@ class Parser:
         def expression_from_boolean_expression(p):
             return p[0]
 
-        @self.pg.production("arthmetic_expression : term")
-        def term(p):
-            return p[0]
-
-        @self.pg.production("term : number")
+        @self.pg.production("arthmetic_expression : number")
         def number(p):
             return Number(p[0].value)
 
-        @self.pg.production("term : string")
+        @self.pg.production("expression : string")
         def string(p):
             return String(p[0].value)
-
-        @self.pg.production("term : time")
-        def time(p):
-            return Time(p[0].value)
 
         @self.pg.error
         def error_handle(token):

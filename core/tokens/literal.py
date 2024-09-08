@@ -50,7 +50,12 @@ class String:
 class Duration:
     """Class for literal token representing time spans."""
 
-    def __init__(self, value: str) -> None:
+    def __init__(self, value: 'str | Duration') -> None:
+        if isinstance(value, Duration):
+            self.hours: int = value.hours
+            self.minutes: int = value.minutes
+            return
+
         match = re.match(r'(?:(\d+)h)?(?:(\d+)m)?', value)
         if match:
             self.hours = int(match.group(1)) if match.group(

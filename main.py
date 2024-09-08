@@ -21,7 +21,7 @@ def evaluate(code: str) -> Any:
 
     Returns
     -------
-    any
+    Any
         Result of the evaluation.
     """
     lexer = Lexer().get_lexer()

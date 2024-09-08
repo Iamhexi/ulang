@@ -168,4 +168,13 @@ class Parser:
             raise ValueError(token)
 
     def get_parser(self):
+        """
+        Supply an instance of a parser, using µLang production rules and
+        tokens.
+
+        Returns
+        -------
+        LRParser
+            An instance of a parser.
+        """
         return self.pg.build()

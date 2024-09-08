@@ -40,3 +40,30 @@ def test_time_arthmetics_emitting_warning(code: str):
     """Test if subtracting a later hour from an earlier hours emits a warning."""
     with pytest.raises(UserWarning):
         evaluate(code)
+
+@pytest.mark.parametrize('code, result', [
+    ('10 - 10 - 20', -20),
+    ('20 * 2 - 10', 30),
+    ('10 / 10 - 10', -9),
+])
+def test_arthmetic_left_associativity(code: str, result: float):
+    """Test if left associativity works."""
+    assert evaluate(code) == result
+
+@pytest.mark.parametrize('code', [
+    '10:15 - 9:15 - 1:00',
+    '20:15 - 2:15 - 15:00',
+])
+def test_time_chaining_raieses_exception(code: str):
+    """Test if chaining operations on time raises an exception."""
+    with pytest.raises(ValueError):
+        evaluate(code)
+
+@pytest.mark.parametrize('code,result', [
+    ('10 - 9 * 10', -80),
+    ('5 / 10 ^ 2', 0.05),
+    ('10 - 10 + 10 * 10 / 2', 50),
+])
+def test_arthmetic_precedence(code: str, result: float):
+    """Test if hierarchy of precedence of arthmetic operators is preserved."""
+    assert evaluate(code) == result

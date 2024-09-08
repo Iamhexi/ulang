@@ -1,7 +1,9 @@
+"""Module containg µLang lexer."""
 from rply import LexerGenerator
 
 
 class Lexer():
+    "Lexer, which recognises pattern in a source code and returns a sequence of tokens."
     def __init__(self):
         self.lexer = LexerGenerator()
 
@@ -34,5 +36,13 @@ class Lexer():
         self.lexer.ignore(r'\s+')
 
     def get_lexer(self):
+        """
+        Supply a µLang-complient lexer.
+
+        Returns
+        -------
+        Lexer
+            An instance of a lexer.
+        """
         self._add_tokens()
         return self.lexer.build()

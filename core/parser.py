@@ -6,6 +6,7 @@ from types import NoneType
 from typing import Any
 from rply import ParserGenerator
 
+from core.symbol_table_manager import Symbol, SymbolTableManager, SymbolType
 from core.tokens.arthmetic import (
     Addition,
     BinaryOperator,
@@ -45,6 +46,9 @@ class Parser:
                 "less_than",
                 "less_or_equal_to",
                 "equal_to",
+                "var",
+                "assign",
+                "symbol_name",
             ],
 
             precedence=[
@@ -53,6 +57,8 @@ class Parser:
                 ('left', ['exponentiation']),
             ],
         )
+
+        self._symbol_table = SymbolTableManager()
 
     def parse(self):
         """
@@ -75,6 +81,10 @@ class Parser:
         @self.pg.production("program : expression ")
         def program(p) -> Any:
             return p[0]
+
+        @self.pg.production("program : variable ")
+        def program_from_variable(p) -> Symbol | None:
+            return self._symbol_table[p[0]]
 
         @self.pg.production("expression : if boolean_expression then expression")
         def condition(p):
@@ -151,7 +161,7 @@ class Parser:
 
         @self.pg.production('expression : duration')
         def duration(p):
-            return Duration(p[0])
+            return Duration(p[0].value)
 
         @self.pg.production('expression : time')
         def time_to_expression(p):
@@ -178,6 +188,22 @@ class Parser:
         @self.pg.production("expression : string")
         def string(p):
             return String(p[0].value)
+
+        @self.pg.production("variable : var symbol_name assign expression")
+        def create_variable(p):
+            variable_name = p[1].value
+            variable_value = p[3].value
+
+            symbol = Symbol(
+                name=variable_name,
+                value=variable_value,
+                type=SymbolType.VARIABLE,
+            )
+            self._symbol_table[variable_name] = symbol
+            return symbol
+
+        # TODO: Finish implementation of a function.
+        # @self.pg.production("function : fun symbol_name")
 
         @self.pg.error
         def error_handle(token):

@@ -25,3 +25,22 @@ Features of µLang:
 - **easy** to use
 - aimed at everyday use
 - evaluated to Python
+
+## Syntax
+
+### Literals
+
+Available literals:
+- **string** between double quotes, e.g.: `"Hello, µLang!"`
+- **number**  either integer or floating-point number, e.g.: `-21` or `3.14`
+- **time** made of hours and minutes, e.g.: `20:15`
+- **duration** represents span of time, e.g.: `1h30m`
+
+### Arthmetics
+
+Available arthmetic operators:
+- **addtion** with `+`
+- **subtraction** with `-`
+- **multiplication** with `*`
+- **division** with `/`
+- **exponentiation** with `^`

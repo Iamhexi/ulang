@@ -44,3 +44,10 @@ Available arthmetic operators:
 - **multiplication** with `*`
 - **division** with `/`
 - **exponentiation** with `^`
+
+### Symbols
+
+Symbol have unique identifiers.
+There are two types of symbol available so far:
+- **variable** created with `var my_name = 10` or `var greeting = "Hello, µLang!"`
+- **function** NOT implemented yet

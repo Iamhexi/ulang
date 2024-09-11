@@ -79,12 +79,37 @@ class Parser:
             _description_
         """
         @self.pg.production("program : expression ")
-        def program(p) -> Any:
+        def one_liner(p) -> Any:
             return p[0]
 
-        @self.pg.production("program : variable ")
-        def program_from_variable(p) -> Symbol | None:
-            return self._symbol_table[p[0]]
+        @self.pg.production("program : symbol_name ")
+        def invoke_symbol(p) -> Symbol | None:
+            symbol = self._symbol_table[p[0].name]
+            if symbol is None:
+                raise NameError(f"No variable or function with the name `{p[0].value}` exists.")
+
+        @self.pg.production("program : variable_declaration ")
+        def declare_variable(p) -> object:
+            symbol = self._symbol_table[p[0].name]
+            if symbol is None:
+                raise KeyError(
+                    f"No variable of `{p[0].value}` found in the Symbol Table"
+                    ", even tough it was just created."
+                )
+
+            class Explanation:
+                """
+                Explanation of variable declaration action with `eval` function.
+                """
+                def __init__(self, symbol: Symbol) -> NoneType:
+                    self.symbol = symbol
+
+                def eval(self) -> str:
+                    """Evaluate to explain a variable creation."""
+                    return f"{self.symbol.name} = {self.symbol.value}"
+
+            explanation = Explanation(symbol=symbol)
+            return explanation
 
         @self.pg.production("expression : if boolean_expression then expression")
         def condition(p):
@@ -188,8 +213,8 @@ class Parser:
         @self.pg.production("expression : string")
         def string(p):
             return String(p[0].value)
-
-        @self.pg.production("variable : var symbol_name assign expression")
+        
+        @self.pg.production("variable_declaration : var symbol_name assign expression")
         def create_variable(p):
             variable_name = p[1].value
             variable_value = p[3].value

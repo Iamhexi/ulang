@@ -12,10 +12,11 @@ To install µLang:
 
 ## Usage
 
-1. Run: `python main.py`.
-2. Type an expression to evaluate: `if 10 > 30 then "Hi, µLang"`, and then press `Enter`.
-3. Or type, for example: `15:48 - 7:21` and press `Enter` (to check how much time has passed from 7:21 to 15:48). And so on.
-4. `Ctrl + c` to exit.
+1. Enter a virtual environment: `source venv/bin/activate`.
+2. Run the interpreter: `python main.py`.
+3. Type an expression to evaluate: `if 10 > 30 then "Hi, µLang"`, and then press `Enter`.
+4. Or type, for example: `15:48 - 7:21` and press `Enter` (to check how much time has passed from 7:21 to 15:48). And so on.
+5. `Ctrl + c` to exit.
 
 ## Features
 

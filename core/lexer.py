@@ -20,7 +20,7 @@ class Lexer():
         self.lexer.add('less_or_equal_to', r'<=')
         self.lexer.add('equal_to', r'==')
         self.lexer.add('assign', r'=')
-        self.lexer.add('symbol_name', r'[a-zA-Z_\-][a-zA-Z0-9_\-]*')
+        self.lexer.add('symbol_name', r'[a-zA-Z_][a-zA-Z0-9_\-]*')
 
         float_pattern = r'((?<![\w.])[+-]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][+-]?\d+)?(?![\w.]))'
         integer_pattern = r'[+-]?\d+'

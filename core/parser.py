@@ -80,7 +80,7 @@ class Parser:
         """
         @self.pg.production("program : expression ")
         def one_liner(p) -> Any:
-            return p[0]
+            return p[0].eval()
 
         @self.pg.production("program : symbol_name ")
         def invoke_symbol(p) -> Symbol | None:
@@ -186,14 +186,14 @@ class Parser:
 
         @self.pg.production('expression : duration')
         def duration(p):
-            return Duration(p[0].value)
+            return Duration(p[0])
 
         @self.pg.production('expression : time')
         def time_to_expression(p):
             return Time(p[0].value)
 
         @self.pg.production('duration : time subtraction time')
-        def time_subtraction(p):
+        def time_subtraction(p) -> Duration:
             time1 = Time(p[0].value)
             time2 = Time(p[2].value)
             return time1 - time2

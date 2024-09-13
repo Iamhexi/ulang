@@ -60,7 +60,7 @@ class Parser:
 
         self._symbol_table = SymbolTableManager()
 
-    def parse(self): # pylint: disable=too-many-locals
+    def parse(self) -> Symbol | None: # pylint: disable=too-many-locals
         """
         Parse tokens, build AST with production rules.
 

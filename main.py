@@ -32,7 +32,8 @@ def evaluate(code: str, lexer: Lexer | None = None, parser: Parser | None = None
         parser = parser_generator.get_parser()
 
     tokens = lexer.lex(code)
-    return parser.parse(tokens).eval()  # type: ignore
+    return parser.parse(tokens) # type: ignore
+
 
 def repl() -> None:
     """Provide read-eval-print loop (REPL) for μLang."""

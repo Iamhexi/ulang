@@ -87,6 +87,7 @@ class Parser:
             symbol = self._symbol_table[p[0].name]
             if symbol is None:
                 raise NameError(f"No variable or function with the name `{p[0].value}` exists.")
+            return symbol
 
         @self.pg.production("program : variable_declaration ")
         def declare_variable(p) -> object:
@@ -101,7 +102,7 @@ class Parser:
                 """
                 Explanation of variable declaration action with `eval` function.
                 """
-                def __init__(self, symbol: Symbol) -> NoneType:
+                def __init__(self, symbol: Symbol) -> None:
                     self.symbol = symbol
 
                 def eval(self) -> str:

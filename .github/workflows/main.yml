@@ -33,7 +33,7 @@ jobs:
         pylint --init-hook='import sys; sys.path.append(".")' .
     - name: Check tyes with mypy
       run: |
-        mypy --follow-imports=skip .
+        mypy --follow-imports=skip --ignore-missing-imports --check-untyped-defs .
     - name: Test with pytest
       run: |
         pytest

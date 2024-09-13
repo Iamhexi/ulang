@@ -1,0 +1,30 @@
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[project]
+name = "micro_lang"
+version = "0.0.1"
+authors = [
+    { name="Igor Sosnowicz", email="igor@sosnowicz.eu" }
+]
+description = "A pleasant and simple programming language."
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+license = {text = "MIT"}
+dependencies = ["rply"]
+
+
+[project.urls]
+Issues = "https://github.com/Iamhexi/ulang/issues"
+
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]

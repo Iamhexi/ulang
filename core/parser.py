@@ -60,7 +60,7 @@ class Parser:
 
         self._symbol_table = SymbolTableManager()
 
-    def parse(self):
+    def parse(self): # pylint: disable=too-many-locals
         """
         Parse tokens, build AST with production rules.
 
@@ -97,7 +97,7 @@ class Parser:
                     ", even tough it was just created."
                 )
 
-            class Explanation:
+            class Explanation: # pylint: disable=too-few-public-methods
                 """
                 Explanation of variable declaration action with `eval` function.
                 """
@@ -213,7 +213,7 @@ class Parser:
         @self.pg.production("expression : string")
         def string(p):
             return String(p[0].value)
-        
+
         @self.pg.production("variable_declaration : var symbol_name assign expression")
         def create_variable(p):
             variable_name = p[1].value
@@ -226,9 +226,6 @@ class Parser:
             )
             self._symbol_table[variable_name] = symbol
             return symbol
-
-        # TODO: Finish implementation of a function.
-        # @self.pg.production("function : fun symbol_name")
 
         @self.pg.error
         def error_handle(token):

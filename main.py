@@ -10,7 +10,7 @@ from core.parser import Parser
 
 logger = logging.Logger('Main logger', level=logging.WARNING)
 
-def evaluate(code: str) -> Any:
+def evaluate(code: str, lexer: Lexer | None = None, parser: Parser | None = None) -> Any:
     """
     Evaluate μLang code.
 
@@ -24,10 +24,12 @@ def evaluate(code: str) -> Any:
     Any
         Result of the evaluation.
     """
-    lexer = Lexer().get_lexer()
-    parser_generator = Parser()
-    parser_generator.parse()
-    parser = parser_generator.get_parser()
+    if lexer is None:
+        lexer = Lexer().get_lexer()
+    if parser is None:
+        parser_generator = Parser()
+        parser_generator.parse()
+        parser = parser_generator.get_parser()
 
     tokens = lexer.lex(code)
     return parser.parse(tokens).eval()  # type: ignore
@@ -52,7 +54,7 @@ def repl() -> None:
             )
         except OverflowError as e:
             logger.warning(e.args[1])
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             logger.error(e)
 
 

@@ -23,8 +23,8 @@ class Symbol:
     name: str
     type: SymbolType
     value: Any
-    scope: Scope | None = None # FIXME: Implement a scope assignment mechanism.
-    created_at_line: int | None = None # FIXME: Implement a line creation reading mechanism.
+    scope: Scope | None = None
+    created_at_line: int | None = None
 
     def eval(self) -> Any:
         """Evaluate symbol to its value."""

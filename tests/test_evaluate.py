@@ -15,7 +15,7 @@ from core.tokens.literal import Duration, Time
 ])
 def test_evaluating_primitives(code: str, output: Any):
     """Test if primitives such as numbers, times, durations and strings as expected."""
-    evaluated: Any = evaluate(code)
+    evaluated = evaluate(code)
     assert type(evaluated) is type(output), \
         f"Mismatch between an actual type ({type(evaluated)}) and" \
         f" expected type ({type(output)})."

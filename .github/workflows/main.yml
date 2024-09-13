@@ -30,7 +30,7 @@ jobs:
         ruff check .
     - name: Lint with pylint
       run: |
-        pylint .
+        pylint --init-hook='import sys; sys.path.append(".")' .
     - name: Check tyes with mypy
       run: |
         mypy --follow-imports=skip .

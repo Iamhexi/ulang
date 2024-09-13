@@ -36,4 +36,6 @@ jobs:
         mypy --follow-imports=skip --ignore-missing-imports --check-untyped-defs .
     - name: Test with pytest
       run: |
-        python -m pytest
+        # Exporting PYTHONPATH disables collection error with pytest.
+        export PYTHONPATH="$PWD"
+        pytest

@@ -10,7 +10,11 @@ from core.parser import Parser
 
 logger = logging.Logger('Main logger', level=logging.WARNING)
 
-def evaluate(code: str, lexer: Lexer | None = None, parser: Parser | None = None) -> Any:
+def evaluate(
+    code: str,
+    lexer: Lexer | None = None,
+    parser: Parser | None = None,
+) -> Any:
     """
     Evaluate μLang code.
 
@@ -37,6 +41,12 @@ def evaluate(code: str, lexer: Lexer | None = None, parser: Parser | None = None
 
 def repl() -> None:
     """Provide read-eval-print loop (REPL) for μLang."""
+    lexer = Lexer().get_lexer()
+
+    parser_generator = Parser()
+    parser_generator.parse()
+    parser = parser_generator.get_parser()
+
     while True:
         try:
             code = input("-> ")
@@ -45,7 +55,7 @@ def repl() -> None:
             break
 
         try:
-            print(evaluate(code=code))
+            print(evaluate(code=code, lexer=lexer, parser=parser))
         except rply.errors.LexingError as e: # type: ignore
             position = e.source_pos
             logger.critical(

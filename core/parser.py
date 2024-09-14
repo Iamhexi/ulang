@@ -55,6 +55,7 @@ class Parser:
                 ('left', ['addition', 'subtraction']),
                 ('left', ['multiplication', 'division']),
                 ('left', ['exponentiation']),
+                ('right', ['var', 'assign']),
             ],
         )
 
@@ -84,10 +85,10 @@ class Parser:
 
         @self.pg.production("program : symbol_name ")
         def invoke_symbol(p) -> Symbol | None:
-            symbol = self._symbol_table[p[0].name]
+            symbol = self._symbol_table[p[0].value]
             if symbol is None:
                 raise NameError(f"No variable or function with the name `{p[0].value}` exists.")
-            return symbol
+            return symbol.eval()
 
         @self.pg.production("program : variable_declaration ")
         def declare_variable(p) -> object:
@@ -110,7 +111,7 @@ class Parser:
                     return f"{self.symbol.name} = {self.symbol.value}"
 
             explanation = Explanation(symbol=symbol)
-            return explanation
+            return explanation.eval()
 
         @self.pg.production("expression : if boolean_expression then expression")
         def condition(p):
@@ -218,7 +219,7 @@ class Parser:
         @self.pg.production("variable_declaration : var symbol_name assign expression")
         def create_variable(p):
             variable_name = p[1].value
-            variable_value = p[3].value
+            variable_value = p[3].eval()
 
             symbol = Symbol(
                 name=variable_name,

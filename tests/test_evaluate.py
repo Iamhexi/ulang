@@ -74,3 +74,13 @@ def test_handling_out_of_range():
     """
     with pytest.raises(OverflowError):
         evaluate('9999999 ^ 99999999')
+
+@pytest.mark.parametrize('code,result', [
+    ('var number = 10', 'number = 10.0'),
+    ('var another_number = -2.50', 'another_number = -2.5'),
+    ('var text = "µLang has var!"', 'text = µLang has var!'),
+    ('var complex_case = 2 ^ 10', 'complex_case = 1024.0'),
+])
+def test_variable_declaration(code: str, result: Any):
+    """Test if declaring a variable is possible."""
+    assert evaluate(code) == result

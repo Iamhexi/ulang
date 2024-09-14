@@ -67,3 +67,9 @@ class SymbolTableManager:
         if isinstance(value, str):
             return self._symbol_table.get(value, None)
         raise NotImplementedError
+
+    def __repr__(self) -> str:
+        output = ''
+        for key, value in self._symbol_table.items():
+            output += key + ' ' + str(value)
+        return output
